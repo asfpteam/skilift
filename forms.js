@@ -13,24 +13,21 @@ function createFormInFolder(folderId, formName) {
   const form = Drive.Files.insert(resource);
   Logger.log('Form created named ' + formName + ' in folder with id: ' + folderId);
 
-  // Return form object
-  return form;
+  // Return form id
+  return form.id;
 }
 
-function clearFormItems(form) {
-  var items = form.getItems();
-  items.forEach(function(e) { form.deleteItem(e) });
-  return form;
-}
+function createRubric(form, rubric) {
+  const page = form.addPageBreakItem();
+  page.setTitle('Rubric ' + rubric.name);
 
-function createRubric(/*form, */rubric) {
-  //var page = form.addPageBreakItem();
-  //page.setTitle('Rubric ' + rubric.name);
   const questions = rubric.questions;
   questions.forEach(function(q) {
-    Logger.log(q);
+    form.addParagraphTextItem()
+      .setTitle(q)
   });
 
+  return page;
   /*buildRubric(form);
   const completeA = form.addMultipleChoiceItem();
   completeA.setTitle('Ready to submit?')
@@ -41,8 +38,9 @@ function createRubric(/*form, */rubric) {
     ]);*/
 }
 
-function createRubrics() {
-  rubrics.forEach(function(r) {
-    createRubric(r);
-  });
+function populateFeedbackForm(formId, title) {
+  const form = FormApp.openById(formId)
+  form.getItems().forEach(function(e) { form.deleteItem(e) });
+  form.setTitle(title);
+  createRubric(form, rubrics[0])
 }
