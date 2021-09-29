@@ -38,9 +38,14 @@ function createRubric(form, rubric) {
     ]);*/
 }
 
-function populateFeedbackForm(formId, title) {
-  const form = FormApp.openById(formId)
+function populateFeedbackForm(formId, formTitle) {
+  const form = FormApp.openById(formId);
+
+  // clear any default items
   form.getItems().forEach(function(e) { form.deleteItem(e) });
-  form.setTitle(title);
-  createRubric(form, rubrics[0])
+
+  // set the form title
+  form.setTitle(formTitle);
+  
+  createRubric(form, rubrics[0]);
 }
