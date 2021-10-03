@@ -18,24 +18,18 @@ function createFormInFolder(folderId, formName) {
 }
 
 function createRubric(form, rubric) {
-  const page = form.addPageBreakItem();
-  page.setTitle('Rubric ' + rubric.name);
+  const section = form.addSectionHeaderItem();
+  section.setTitle(rubric.name);
 
-  const questions = rubric.questions;
+  const { questions } = rubric;
   questions.forEach(function(q) {
+    const { name, description, goal } = q;
     form.addParagraphTextItem()
-      .setTitle(q)
+      .setTitle(name)
+      .setHelpText(`Description: ${description} Goal: ${goal}`);
   });
 
-  return page;
-  /*buildRubric(form);
-  const completeA = form.addMultipleChoiceItem();
-  completeA.setTitle('Ready to submit?')
-    .setRequired(true)
-    .setChoices([
-      completeA.createChoice('Yes', FormApp.PageNavigationType.SUBMIT),
-      completeA.createChoice('No', rubricA)
-    ]);*/
+  return section;
 }
 
 function populateFeedbackForm(formId, formTitle) {
@@ -47,5 +41,5 @@ function populateFeedbackForm(formId, formTitle) {
   // set the form title
   form.setTitle(formTitle);
   
-  createRubric(form, rubrics[0]);
+  createRubric(form, rubric);
 }
